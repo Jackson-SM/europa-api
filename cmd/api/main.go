@@ -5,6 +5,7 @@ import (
 
 	"github.com/Jackson-SM/Europa/cmd/internal/config"
 	"github.com/Jackson-SM/Europa/cmd/internal/database"
+	"github.com/Jackson-SM/Europa/cmd/internal/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -18,13 +19,10 @@ func main() {
 		log.Println(".env file not found")
 	}
 
+	routes.AddRoutes(router)
+
 	cfg := config.Load()
 	database.Connect(cfg.DatabaseURL)
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello World!",
-		})
-	})
 	router.Run(host + ":" + port)
 }
