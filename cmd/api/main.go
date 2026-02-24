@@ -19,10 +19,11 @@ func main() {
 		log.Println(".env file not found")
 	}
 
-	routes.AddRoutes(router)
-
 	cfg := config.Load()
-	database.Connect(cfg.DatabaseURL)
+	db := database.Connect(cfg.DatabaseURL)
+
+	rg := router.Group("/api/v1")
+	routes.UserRoutes(rg, db)
 
 	router.Run(host + ":" + port)
 }
