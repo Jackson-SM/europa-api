@@ -14,5 +14,6 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 }
 
 func (ur *UserRepository) Create(user *entities.User) (*entities.User, string) {
+	ur.db.Create(&user)
 	return user, "user created successfully"
 }

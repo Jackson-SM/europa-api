@@ -14,6 +14,6 @@ type User struct {
 	UpdatedAt time.Time
 }
 
-func NewUser(name string, email string) *User{
+func NewUser(name string, email string) *User {
 	return &User{ID: uuid.NewString(), Name: name, Email: email}
 }

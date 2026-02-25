@@ -22,6 +22,8 @@ func main() {
 	cfg := config.Load()
 	db := database.Connect(cfg.DatabaseURL)
 
+	database.RunMigrations(db)
+
 	rg := router.Group("/api/v1")
 	routes.UserRoutes(rg, db)
 
