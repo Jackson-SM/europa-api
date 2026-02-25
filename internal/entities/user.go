@@ -4,16 +4,19 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type User struct {
-	ID        string
+	ID        uuid.UUID `gorm:"type:uuid"`
 	Name      string
 	Email     string
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt
 }
 
-func NewUser(name string, email string) *User {
-	return &User{ID: uuid.NewString(), Name: name, Email: email}
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	u.ID = uuid.New()
+	return
 }
