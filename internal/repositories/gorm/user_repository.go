@@ -13,7 +13,15 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-func (ur *UserRepository) Create(user *entities.User) (*entities.User, string) {
+func (ur *UserRepository) Create(user *entities.User) *entities.User {
 	ur.db.Create(&user)
-	return user, "user created successfully"
+	return user
+}
+
+func (ur *UserRepository) FindById(id string) entities.User {
+	var user entities.User
+
+	ur.db.Where("id", id).First(&user)
+
+	return user
 }

@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/Jackson-SM/Europa/internal/dtos"
 	"github.com/Jackson-SM/Europa/internal/entities"
 	"github.com/Jackson-SM/Europa/internal/interfaces"
 	"github.com/gin-gonic/gin"
@@ -17,11 +18,24 @@ func NewUserController(userRepository interfaces.UserRepositoryInterface) *UserC
 }
 
 func (uc *UserController) Create(ctx *gin.Context) {
-	var user *entities.User = entities.NewUser("Jackson", "example@gmail.com")
+	var body dtos.CreateUserDTO
+
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		ctx.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user entities.User = *entities.NewUser(body.Name, body.Email)
+
+	uc.userRepository.Create(&user)
 
 	ctx.JSON(http.StatusCreated, user)
+}
 
-	user, msg := uc.userRepository.Create(user)
+func (uc *UserController) FindById(ctx *gin.Context) {
+	id := ctx.Param("id")
 
-	print(user, msg)
+	user := uc.userRepository.FindById(id)
+
+	ctx.JSON(http.StatusOK, user)
 }
