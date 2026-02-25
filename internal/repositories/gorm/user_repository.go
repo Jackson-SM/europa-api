@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/Jackson-SM/Europa/cmd/internal/entities"
+	"github.com/Jackson-SM/Europa/internal/entities"
 	"gorm.io/gorm"
 )
 

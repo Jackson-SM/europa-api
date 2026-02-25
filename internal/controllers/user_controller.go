@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/Jackson-SM/Europa/cmd/internal/entities"
-	"github.com/Jackson-SM/Europa/cmd/internal/interfaces"
+	"github.com/Jackson-SM/Europa/internal/entities"
+	"github.com/Jackson-SM/Europa/internal/interfaces"
 	"github.com/gin-gonic/gin"
 )
 

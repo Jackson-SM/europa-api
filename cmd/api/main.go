@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/Jackson-SM/Europa/cmd/internal/config"
-	"github.com/Jackson-SM/Europa/cmd/internal/database"
-	"github.com/Jackson-SM/Europa/cmd/internal/routes"
+	"github.com/Jackson-SM/Europa/internal/config"
+	"github.com/Jackson-SM/Europa/internal/database"
+	"github.com/Jackson-SM/Europa/internal/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )

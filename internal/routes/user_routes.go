@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/Jackson-SM/Europa/cmd/internal/controllers"
-	repositories "github.com/Jackson-SM/Europa/cmd/internal/repositories/gorm"
+	"github.com/Jackson-SM/Europa/internal/controllers"
+	repositories "github.com/Jackson-SM/Europa/internal/repositories/gorm"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
