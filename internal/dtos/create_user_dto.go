@@ -1,6 +1,0 @@
-package dtos
-
-type CreateUserDTO struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-}

@@ -3,7 +3,6 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/Jackson-SM/Europa/internal/dtos"
 	"github.com/Jackson-SM/Europa/internal/entities"
 	"github.com/Jackson-SM/Europa/internal/interfaces"
 	"github.com/gin-gonic/gin"
@@ -18,18 +17,20 @@ func NewUserController(userRepository interfaces.UserRepositoryInterface) *UserC
 }
 
 func (uc *UserController) Create(ctx *gin.Context) {
-	var body dtos.CreateUserDTO
+	var body struct {
+		Name     string `json:"name"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
 
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	var user entities.User = entities.User{Name: body.Name, Email: body.Email}
+	var user entities.User = entities.User{Name: body.Name, Email: body.Email, Password: body.Password}
 
-	err := uc.userRepository.Create(&user)
-
-	if err == nil {
+	if user := uc.userRepository.Create(&user); user == nil {
 		ctx.JSON(http.StatusConflict, gin.H{"message": "It was not possible to insert the user in the database"})
 		return
 	}

@@ -14,7 +14,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 }
 
 func (ur *UserRepository) Create(user *entities.User) *entities.User {
-	if err := ur.db.Create(&user); err != nil {
+	if err := ur.db.Create(&user).Error; err != nil {
 		return nil
 	}
 	return user
@@ -23,7 +23,7 @@ func (ur *UserRepository) Create(user *entities.User) *entities.User {
 func (ur *UserRepository) FindById(id string) *entities.User {
 	var user entities.User
 
-	if err := ur.db.Where("id", id).First(&user); err != nil {
+	if err := ur.db.Where("id", id).First(&user).Error; err != nil {
 		return nil
 	}
 
