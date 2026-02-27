@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/Jackson-SM/Europa/internal/entities"
+	"github.com/Jackson-SM/Europa/internal/domain"
 	"gorm.io/gorm"
 )
 
@@ -13,15 +13,15 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-func (ur *UserRepository) Create(user *entities.User) *entities.User {
+func (ur *UserRepository) Create(user *domain.User) *domain.User {
 	if err := ur.db.Create(&user).Error; err != nil {
 		return nil
 	}
 	return user
 }
 
-func (ur *UserRepository) FindById(id string) *entities.User {
-	var user entities.User
+func (ur *UserRepository) FindById(id string) *domain.User {
+	var user domain.User
 
 	if err := ur.db.Where("id", id).First(&user).Error; err != nil {
 		return nil

@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/Jackson-SM/Europa/internal/controllers"
-	repositories "github.com/Jackson-SM/Europa/internal/repositories/gorm"
+	repositories "github.com/Jackson-SM/Europa/internal/repositories"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

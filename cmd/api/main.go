@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/Jackson-SM/Europa/internal/config"
@@ -11,8 +12,6 @@ import (
 )
 
 func main() {
-	host := "localhost"
-	port := "3030"
 	router := gin.Default()
 
 	if err := godotenv.Load(); err != nil {
@@ -22,10 +21,16 @@ func main() {
 	cfg := config.Load()
 	db := database.Connect(cfg.DatabaseURL)
 
-	database.RunMigrations(db)
+	if err := database.RunMigrations(db); err != nil {
+		log.Fatalf("Migration failed: %v", err)
+	}
 
 	rg := router.Group("/api/v1")
 	routes.UserRoutes(rg, db)
 
-	router.Run(host + ":" + port)
+	addr := fmt.Sprintf(":%s", "3030")
+
+	if err := router.Run(addr); err != nil {
+		log.Fatalf("Server failed: %v", err)
+	}
 }

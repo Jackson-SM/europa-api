@@ -3,39 +3,53 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/Jackson-SM/Europa/internal/entities"
-	"github.com/Jackson-SM/Europa/internal/interfaces"
+	"github.com/Jackson-SM/Europa/internal/domain"
+	"github.com/Jackson-SM/Europa/internal/dto"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
-type UserController struct {
-	userRepository interfaces.UserRepositoryInterface
+type UserRepositoryInterface interface {
+	Create(user *domain.User) *domain.User
+	FindById(id string) *domain.User
 }
 
-func NewUserController(userRepository interfaces.UserRepositoryInterface) *UserController {
+type UserController struct {
+	userRepository UserRepositoryInterface
+}
+
+func NewUserController(userRepository UserRepositoryInterface) *UserController {
 	return &UserController{userRepository: userRepository}
 }
 
 func (uc *UserController) Create(ctx *gin.Context) {
-	var body struct {
-		Name     string `json:"name"`
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
+
+	var body dto.CreateUserRequest
 
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	var user entities.User = entities.User{Name: body.Name, Email: body.Email, Password: body.Password}
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "could not hash password"})
+		return
+	}
 
-	if user := uc.userRepository.Create(&user); user == nil {
+	var user domain.User = domain.User{
+		Name: body.Name,
+		Email: body.Email,
+		Password: string(hashPassword),
+	}
+
+	createdUser := uc.userRepository.Create(&user)
+	if createdUser == nil {
 		ctx.JSON(http.StatusConflict, gin.H{"message": "It was not possible to insert the user in the database"})
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, user)
+	ctx.JSON(http.StatusCreated, createdUser)
 }
 
 func (uc *UserController) FindById(ctx *gin.Context) {
