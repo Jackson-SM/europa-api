@@ -38,8 +38,8 @@ func (uc *UserController) Create(ctx *gin.Context) {
 	}
 
 	var user domain.User = domain.User{
-		Name: body.Name,
-		Email: body.Email,
+		Name:     body.Name,
+		Email:    body.Email,
 		Password: string(hashPassword),
 	}
 
@@ -49,7 +49,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, createdUser)
+	ctx.JSON(http.StatusCreated, createdUser.ToResponse())
 }
 
 func (uc *UserController) FindById(ctx *gin.Context) {
@@ -62,5 +62,5 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	ctx.JSON(http.StatusOK, user.ToResponse())
 }
