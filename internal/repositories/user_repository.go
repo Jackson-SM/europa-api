@@ -13,19 +13,19 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-func (ur *UserRepository) Create(user *domain.User) *domain.User {
+func (ur *UserRepository) Create(user *domain.User) (*domain.User, error) {
 	if err := ur.db.Create(&user).Error; err != nil {
-		return nil
+		return nil, err
 	}
-	return user
+	return user, nil
 }
 
-func (ur *UserRepository) FindById(id string) *domain.User {
+func (ur *UserRepository) FindById(id string) (*domain.User, error) {
 	var user domain.User
 
 	if err := ur.db.Where("id", id).First(&user).Error; err != nil {
-		return nil
+		return nil, err
 	}
 
-	return &user
+	return &user, nil
 }

@@ -10,8 +10,8 @@ import (
 )
 
 type UserRepositoryInterface interface {
-	Create(user *domain.User) *domain.User
-	FindById(id string) *domain.User
+	Create(user *domain.User) (*domain.User, error)
+	FindById(id string) (*domain.User, error)
 }
 
 type UserController struct {
@@ -43,8 +43,8 @@ func (uc *UserController) Create(ctx *gin.Context) {
 		Password: string(hashPassword),
 	}
 
-	createdUser := uc.userRepository.Create(&user)
-	if createdUser == nil {
+	createdUser, err := uc.userRepository.Create(&user)
+	if err != nil {
 		ctx.JSON(http.StatusConflict, gin.H{"message": "It was not possible to insert the user in the database"})
 		return
 	}
@@ -55,9 +55,9 @@ func (uc *UserController) Create(ctx *gin.Context) {
 func (uc *UserController) FindById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	user := uc.userRepository.FindById(id)
+	user, err := uc.userRepository.FindById(id)
 
-	if user == nil {
+	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": "user not found"})
 		return
 	}
